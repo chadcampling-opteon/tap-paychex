@@ -1,0 +1,32 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "tap-paychex",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "program": "tap_paychex",
+            "justMyCode": false,
+            // "args": [
+            //     "--config",
+            //     ".secrets/config.json",
+            // ],
+        },
+        {
+            "name": "tap-paychex discover",
+            "type": "python",
+            "pythonPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            //"module": "tap_powerbi_metadata.TapPowerBIMetadata.cli",
+            "program": "${workspaceFolder}/tap-paychex",
+            "args": ["--config", "${workspaceFolder}/.secrets/config.json", "--discover"],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+    ]
+}
