@@ -1,0 +1,531 @@
+{
+    "type": "object",
+    "properties": {
+        "workerId": {
+            "type": "string",
+            "description": "The unique identifier associated with this worker representation.",
+            "example": "00Z5V9BTIHRQF2CF7BTH"
+        },
+        "employeeId": {
+            "type": "string",
+            "description": "The workers employee identification information.",
+            "example": "3052"
+        },
+        "workerType": {
+            "type": "string",
+            "description": "The type of worker. This data field cannot be PATCHED.",
+            "example": "EMPLOYEE",
+            "enum": [
+                "EMPLOYEE",
+                "CONTRACTOR",
+                "INDEPENDENT_CONTRACTOR"
+            ]
+        },
+        "employmentType": {
+            "type": "string",
+            "description": "The type of employment for the worker.",
+            "example": "FULL_TIME",
+            "enum": [
+                "FULL_TIME",
+                "PART_TIME"
+            ]
+        },
+        "customEmploymentType": {
+            "type": "object",
+            "properties": {
+                "customEmploymentTypeId": {
+                    "type": "string",
+                    "description": "Unique ID for the custom employment type which the worker is assigned to. This data field cannot be PATCHED for IN_PROGRESS workers.",
+                    "example": "970008177269854"
+                },
+                "customEmploymentTypeName": {
+                    "type": "string",
+                    "description": "The name of the custom employment type that the worker is assigned to.",
+                    "example": "Hybrid"
+                }
+            },
+            "description": "The workers custom employment type",
+            "example": "FULL_TIME_CUSTOM_1"
+        },
+        "exemptionType": {
+            "type": "string",
+            "description": "The Overtime classification of the worker. This data field cannot be PATCHED for ACTIVE workers.",
+            "example": "NON_EXEMPT",
+            "enum": [
+                "EXEMPT",
+                "NON_EXEMPT"
+            ]
+        },
+        "workState": {
+            "type": "string",
+            "description": "The state(s) in which the worker works in."
+        },
+        "birthDate": {
+            "type": "string",
+            "description": "The workers date of birth. It cannot be greater than today's date.",
+            "format": "date-time",
+            "example": "1988-07-01T00:00:00Z"
+        },
+        "sex": {
+            "type": "string",
+            "example": "MALE",
+            "enum": [
+                "MALE",
+                "FEMALE",
+                "NOT_SPECIFIED"
+            ]
+        },
+        "ethnicityCode": {
+            "type": "string",
+            "description": "Disclaimer:This parameter is not visible in Flex for the client. This data field cannot be PATCHED for ACTIVE workers."
+        },
+        "hireDate": {
+            "type": "string",
+            "description": "The date which the worker was hired. It cannot be PATCHED for ACTIVE workers.",
+            "format": "date-time",
+            "example": "2015-06-15T00:00:00Z"
+        },
+        "clockId": {
+            "type": "string",
+            "description": "The clock ID of the worker that can be an identification for other systems.",
+            "example": "4321"
+        },
+        "name": {
+            "type": "object",
+            "properties": {
+                "familyName": {
+                    "type": "string",
+                    "description": "The family or last name of a worker.",
+                    "example": "JONES"
+                },
+                "middleName": {
+                    "type": "string",
+                    "description": "A subordinate given name, or initial representing that name, of a worker. <br />NOTE:  Please send in just a single character initial for middleName.  <br />If sending in more than one character the name will be truncated the first letter of the middleName. <br /> A full middle name can be entered directly in Paychex Flex only at this time.",
+                    "example": "H"
+                },
+                "givenName": {
+                    "type": "string",
+                    "description": "The given or first name of a worker. For an independent contractor that is a company rather than an individual, the name of the company.",
+                    "example": "INDIANA"
+                },
+                "preferredName": {
+                    "type": "string",
+                    "description": "The name that the worker prefers to go by; also known as a \"nickname\"",
+                    "example": "Indi"
+                },
+                "qualificationAffixCode": {
+                    "type": "string",
+                    "description": "A qualifier to the name of a worker, indicating generation.",
+                    "example": "Jr"
+                },
+                "titleAffixCode": {
+                    "type": "string",
+                    "description": "A personal title that comes before an individual's name in a formal address (such as Dr., Prof., Rev., Mr.). ",
+                    "example": "Dr"
+                }
+            },
+            "description": "Information about the workers name."
+        },
+        "legalId": {
+            "type": "object",
+            "properties": {
+                "legalIdType": {
+                    "type": "string",
+                    "description": "A value that identifies the type of taxpayer identification number provided.   SSN: Social  Security Number - 9 digit number   , FEIN: Federal Employer Identification Number (EIN)",
+                    "enum": [
+                        "SSN",
+                        "FEIN"
+                    ]
+                },
+                "legalIdValue": {
+                    "type": "string",
+                    "description": "The federal level taxpayer id number that the worker has provided",
+                    "example": "333221111"
+                }
+            },
+            "description": "The workers legal tax identification information. This data field cannot be PATCHED for ACTIVE workers."
+        },
+        "laborAssignmentId": {
+            "type": "string",
+            "description": "The workers home labor assignment.",
+            "example": "970001557863345"
+        },
+        "locationId": {
+            "type": "string",
+            "description": "The workers location.",
+            "example": "970001701620675"
+        },
+        "jobId": {
+            "type": "string",
+            "description": "The workers home job. This data field cannot be POSTED or PATCHED.",
+            "example": "970001557916904"
+        },
+        "job": {
+            "type": "object",
+            "properties": {
+                "jobTitleId": {
+                    "type": "string",
+                    "description": "Unique ID for that job within the company that the worker is assigned to.",
+                    "example": "00DWS906IMW2JSH8AQJ8"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "The name of the title that the worker is assigned to.",
+                    "example": "Archaeologist"
+                }
+            },
+            "description": "The workers current job/position information."
+        },
+        "organization": {
+            "type": "object",
+            "properties": {
+                "organizationId": {
+                    "type": "string",
+                    "description": "The unique identifier associated with this organizations representation.",
+                    "example": "1020022951957523"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the organization.",
+                    "example": "2 Division B"
+                },
+                "number": {
+                    "type": "string",
+                    "description": "The number assigned to the organization.",
+                    "example": "1"
+                },
+                "level": {
+                    "type": "string",
+                    "description": "The level number within the organizational structures hierarchy."
+                },
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#"
+                    }
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "rel": {
+                                "type": "string"
+                            },
+                            "href": {
+                                "type": "string"
+                            },
+                            "hreflang": {
+                                "type": "string"
+                            },
+                            "media": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "deprecation": {
+                                "type": "string"
+                            },
+                            "profile": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "description": "The organization which the worker is part of."
+        },
+        "supervisor": {
+            "type": "object",
+            "properties": {
+                "workerId": {
+                    "type": "string",
+                    "description": "The supervisor's Id",
+                    "example": "00H2A1IUJ4IPERJ589YE"
+                },
+                "name": {
+                    "type": "object",
+                    "properties": {
+                        "familyName": {
+                            "type": "string",
+                            "description": "The family or last name of a worker.",
+                            "example": "JONES"
+                        },
+                        "middleName": {
+                            "type": "string",
+                            "description": "A subordinate given name, or initial representing that name, of a worker. <br />NOTE:  Please send in just a single character initial for middleName.  <br />If sending in more than one character the name will be truncated the first letter of the middleName. <br /> A full middle name can be entered directly in Paychex Flex only at this time.",
+                            "example": "H"
+                        },
+                        "givenName": {
+                            "type": "string",
+                            "description": "The given or first name of a worker. For an independent contractor that is a company rather than an individual, the name of the company.",
+                            "example": "INDIANA"
+                        },
+                        "preferredName": {
+                            "type": "string",
+                            "description": "The name that the worker prefers to go by; also known as a \"nickname\"",
+                            "example": "Indi"
+                        },
+                        "qualificationAffixCode": {
+                            "type": "string",
+                            "description": "A qualifier to the name of a worker, indicating generation.",
+                            "example": "Jr"
+                        },
+                        "titleAffixCode": {
+                            "type": "string",
+                            "description": "A personal title that comes before an individual's name in a formal address (such as Dr., Prof., Rev., Mr.). ",
+                            "example": "Dr"
+                        }
+                    },
+                    "description": "Information about the workers name."
+                }
+            },
+            "description": "The workers supervisor information."
+        },
+        "currentStatus": {
+            "type": "object",
+            "properties": {
+                "workerStatusId": {
+                    "type": "string",
+                    "description": "The unique identifier associated with this status representation.",
+                    "example": "00DWS906IMW2JSH8AQJ9"
+                },
+                "statusType": {
+                    "type": "string",
+                    "description": "The workers current status.",
+                    "example": "ACTIVE",
+                    "enum": [
+                        "ACTIVE",
+                        "INACTIVE",
+                        "TERMINATED",
+                        "PENDING",
+                        "IN_PROGRESS"
+                    ]
+                },
+                "statusReason": {
+                    "type": "string",
+                    "description": "The detailed reason of the workers current status.",
+                    "example": "HIRED"
+                },
+                "effectiveDate": {
+                    "type": "string",
+                    "description": "Date that this status has started for the worker.",
+                    "format": "date-time",
+                    "example": "2015-06-15T00:00:00Z"
+                },
+                "order": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "rel": {
+                                "type": "string"
+                            },
+                            "href": {
+                                "type": "string"
+                            },
+                            "hreflang": {
+                                "type": "string"
+                            },
+                            "media": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "deprecation": {
+                                "type": "string"
+                            },
+                            "profile": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "description": "The workers employment status information. This data field cannot be POSTED or PATCHED for an IN_PROGRESS worker.",
+            "example": "ACTIVE"
+        },
+        "communications": {
+            "type": "array",
+            "description": "Worker Communications. This data field cannot be updated for worker endpoint.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "communicationId": {
+                        "type": "string",
+                        "description": "The ID for the workers specific communication item."
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "A set of communication types classifying an instruction that the customer, requester, or subject must comply with in order for the screening to go forward. NOTE: PHONE and EMAIL type supports BUSINESS and PERSONAL usage type only.MOBILE_PHONE, FAX and PAGER supports BUSINESS usage type only.This data field cannot be PATCHED.",
+                        "enum": [
+                            "STREET_ADDRESS",
+                            "PO_BOX_ADDRESS",
+                            "PHONE",
+                            "MOBILE_PHONE",
+                            "FAX",
+                            "EMAIL",
+                            "PAGER"
+                        ]
+                    },
+                    "usageType": {
+                        "type": "string",
+                        "description": "A code classifying a designated use associated with a contact method. For example, whether a telephone or email address is one for business communications or one primarily for personal use.This data field cannot be PATCHED.",
+                        "enum": [
+                            "PERSONAL",
+                            "BUSINESS",
+                            "HOME",
+                            "WORK",
+                            "LOCATION_STREET_ADDRESS",
+                            "MAILING_ADDRESS"
+                        ]
+                    },
+                    "dialCountry": {
+                        "type": "string",
+                        "description": "The country dialing code for a communication number"
+                    },
+                    "dialArea": {
+                        "type": "string",
+                        "description": "The area dialing code for a communication number"
+                    },
+                    "dialNumber": {
+                        "type": "string",
+                        "description": "The communication number, not including country dialing or area dialing codes"
+                    },
+                    "dialExtension": {
+                        "type": "string",
+                        "description": "The extension of the associated communication number"
+                    },
+                    "uri": {
+                        "type": "string",
+                        "description": "The mailto address as specified in RFC2368"
+                    },
+                    "streetLineOne": {
+                        "type": "string",
+                        "description": "The street address line one"
+                    },
+                    "streetLineTwo": {
+                        "type": "string",
+                        "description": "The street address line two"
+                    },
+                    "postOfficeBox": {
+                        "type": "string",
+                        "description": "The postal office box. This data field cannot be PATCHED"
+                    },
+                    "city": {
+                        "type": "string",
+                        "description": "The city name"
+                    },
+                    "postalCode": {
+                        "type": "string",
+                        "description": "The zip-code"
+                    },
+                    "postalCodeExtension": {
+                        "type": "string",
+                        "description": "The zip-code extension"
+                    },
+                    "countrySubdivisionCode": {
+                        "type": "string",
+                        "description": "The state code (ISO 3166 subdivision code)"
+                    },
+                    "countryCode": {
+                        "type": "string",
+                        "description": "The country code (ISO 3166 alpha-2)"
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "rel": {
+                                    "type": "string"
+                                },
+                                "href": {
+                                    "type": "string"
+                                },
+                                "hreflang": {
+                                    "type": "string"
+                                },
+                                "media": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "deprecation": {
+                                    "type": "string"
+                                },
+                                "profile": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "links": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "rel": {
+                        "type": "string"
+                    },
+                    "href": {
+                        "type": "string"
+                    },
+                    "hreflang": {
+                        "type": "string"
+                    },
+                    "media": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "deprecation": {
+                        "type": "string"
+                    },
+                    "profile": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "workerCorrelationId": {
+            "type": "string",
+            "description": "Id that you define which is used for error handling/responses.This data field is used while POSTING multiple IN_PROGRESS workers"
+        }
+    }
+}

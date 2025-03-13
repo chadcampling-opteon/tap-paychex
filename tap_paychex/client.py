@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-import decimal
+from abc import ABCMeta
 import typing as t
 from functools import cached_property
 from importlib import resources
 
-from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.pagination import BaseAPIPaginator  # noqa: TC002
+from singer_sdk.pagination import BaseAPIPaginator, SimpleHeaderPaginator  # noqa: TC002
 from singer_sdk.streams import RESTStream
 
 from tap_paychex.auth import PaychexAuthenticator
@@ -24,18 +23,22 @@ SCHEMAS_DIR = resources.files(__package__) / "schemas"
 
 class PaychexStream(RESTStream):
     """Paychex stream class."""
+    # Set to true for endpoints that support pagination
+    pagination_support = False
+    
+    # Paychex recommend a max 100 page size
+    _page_size = 100
+    
+    # Used in Paychex pagination
+    _etag = None
 
     # Update this value if necessary or override `parse_response`.
-    records_jsonpath = "$[*]"
-
-    # Update this value if necessary or override `get_new_paginator`.
-    next_page_token_jsonpath = "$.next_page"  # noqa: S105
+    records_jsonpath = "$.content[*]"
 
     @property
     def url_base(self) -> str:
         """Return the API URL root, configurable via tap settings."""
-        # TODO: hardcode a value here, or retrieve it from self.config
-        return "https://api.mysample.com"
+        return "https://api.paychex.com"
 
     @cached_property
     def authenticator(self) -> Auth:
@@ -48,12 +51,17 @@ class PaychexStream(RESTStream):
 
     @property
     def http_headers(self) -> dict:
-        """Return the http headers needed.
+        """Return headers dict to be used for HTTP requests.
+
+        If an authenticator is also specified, the authenticator's headers will be
+        combined with `http_headers` when making HTTP requests.
 
         Returns:
-            A dictionary of HTTP headers.
+            Dictionary of HTTP headers to use as a base for every request.
         """
-        return {}
+        if self.pagination_support and self._etag:
+            return self._http_headers | {"ETag": self._etag}
+        return self._http_headers
 
     def get_new_paginator(self) -> BaseAPIPaginator:
         """Create a new pagination helper instance.
@@ -68,7 +76,10 @@ class PaychexStream(RESTStream):
         Returns:
             A pagination helper instance.
         """
-        return super().get_new_paginator()
+        if self.pagination_support:
+            return PaychexPaginator(page_size=self._page_size)
+        
+        return SimpleHeaderPaginator("X-Next-Page")
 
     def get_url_params(
         self,
@@ -85,11 +96,15 @@ class PaychexStream(RESTStream):
             A dictionary of URL query parameters.
         """
         params: dict = {}
-        if next_page_token:
-            params["page"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
+        if self.pagination_support:
+            params["limit"] = self._page_size
+
+            if(next_page_token):
+                params["offset"] = next_page_token["offset"]
+                
+            else:
+                params["offset"] = self._start_offset
+
         return params
 
     def prepare_request_payload(
@@ -108,37 +123,44 @@ class PaychexStream(RESTStream):
         Returns:
             A dictionary with the JSON body for a POST requests.
         """
-        # TODO: Delete this method if no payload is required. (Most REST APIs.)
+        if self.pagination_support and next_page_token and "etag" in next_page_token:
+                self._etag= f"""{next_page_token["etag"]}"""
         return None
 
-    def parse_response(self, response: requests.Response) -> t.Iterable[dict]:
-        """Parse the response and return an iterator of result records.
+class PaychexPaginator(BaseAPIPaginator[dict], metaclass=ABCMeta):
+    """Paginator class for APIs that use page offset."""
 
-        Args:
-            response: The HTTP ``requests.Response`` object.
-
-        Yields:
-            Each record from the source.
-        """
-        # TODO: Parse response body and return a set of records.
-        yield from extract_jsonpath(
-            self.records_jsonpath,
-            input=response.json(parse_float=decimal.Decimal),
-        )
-
-    def post_process(
+    def __init__(
         self,
-        row: dict,
-        context: Context | None = None,  # noqa: ARG002
-    ) -> dict | None:
-        """As needed, append or transform raw data to match expected structure.
+        page_size: int,
+        *args: t.Any,
+        **kwargs: t.Any,
+    ) -> None:
+        """Create a new paginator.
 
         Args:
-            row: An individual record from the stream.
-            context: The stream context.
+            start_value: Initial value.
+            page_size: Constant page size.
+            args: Paginator positional arguments.
+            kwargs: Paginator keyword arguments.
+        """
+        super().__init__({"offset": 0}, *args, **kwargs)
+        self._page_size = page_size
+
+   
+    def get_next(self, response: requests.Response) -> dict | None:
+        """Get the next page offset.
+
+        Args:
+            response: API response object.
 
         Returns:
-            The updated record dictionary, or ``None`` to skip the record.
+            The next page offset.
         """
-        # TODO: Delete this method if not needed.
-        return row
+        offset = self._value["offset"] + self._page_size
+        etag = response.headers["etag"]
+        result = {
+            "offset": offset,
+            "etag": etag
+        }
+        return result

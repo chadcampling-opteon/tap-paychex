@@ -4,63 +4,47 @@ from __future__ import annotations
 
 import typing as t
 from importlib import resources
-
-from singer_sdk import typing as th  # JSON Schema typing helpers
+from urllib.parse import urlparse
 
 from tap_paychex.client import PaychexStream
 
-# TODO: Delete this is if not using json files for schema definition
+
 SCHEMAS_DIR = resources.files(__package__) / "schemas"
-# TODO: - Override `UsersStream` and `GroupsStream` with your own stream definition.
-#       - Copy-paste as many times as needed to create multiple stream types.
 
-
-class UsersStream(PaychexStream):
-    """Define custom stream."""
-
-    name = "users"
-    path = "/users"
-    primary_keys: t.ClassVar[list[str]] = ["id"]
+class CompaniesStream(PaychexStream):
+    """Define Companies stream."""
+    pagination_support = False
+    
+    name = "companies"
+    path = "/companies"
+    primary_keys: t.ClassVar[list[str]] = ["companyId"]
     replication_key = None
     # Optionally, you may also use `schema_filepath` in place of `schema`:
-    # schema_filepath = SCHEMAS_DIR / "users.json"  # noqa: ERA001
-    schema = th.PropertiesList(
-        th.Property("name", th.StringType),
-        th.Property(
-            "id",
-            th.StringType,
-            description="The user's system ID",
-        ),
-        th.Property(
-            "age",
-            th.IntegerType,
-            description="The user's age in years",
-        ),
-        th.Property(
-            "email",
-            th.StringType,
-            description="The user's email address",
-        ),
-        th.Property("street", th.StringType),
-        th.Property("city", th.StringType),
-        th.Property(
-            "state",
-            th.StringType,
-            description="State name in ISO 3166-2 format",
-        ),
-        th.Property("zip", th.StringType),
-    ).to_dict()
+    schema_filepath = SCHEMAS_DIR / "companies.json"  # noqa: ERA001
 
+    def get_child_context(self, record: dict, context: t.Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        worker_link = next((link["href"] for link in record["links"] if link["rel"] == "workers"), None)
+        if(worker_link):
+            worker_parsed_url = urlparse(worker_link)
+        return {
+           "worker_path": worker_parsed_url.path,
+           "worker_url": worker_link
+        }
 
-class GroupsStream(PaychexStream):
-    """Define custom stream."""
+class WorkersStream(PaychexStream):
+    """Define Companies stream."""
+    _LOG_REQUEST_METRIC_URLS = True
+    pagination_support = True
+    
+    name = "workers"
+    parent_stream_type = CompaniesStream
+    ignore_parent_replication_keys = True
+    path = None
+    primary_keys: t.ClassVar[list[str]] = ["workerId"]
+    replication_key = None
+    # Optionally, you may also use `schema_filepath` in place of `schema`:
+    schema_filepath = SCHEMAS_DIR / "workers.json"  # noqa: ERA001
 
-    name = "groups"
-    path = "/groups"
-    primary_keys: t.ClassVar[list[str]] = ["id"]
-    replication_key = "modified"
-    schema = th.PropertiesList(
-        th.Property("name", th.StringType),
-        th.Property("id", th.StringType),
-        th.Property("modified", th.DateTimeType),
-    ).to_dict()
+    def get_url(self, context):
+        return context["worker_url"]

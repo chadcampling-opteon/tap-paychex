@@ -17,39 +17,20 @@ class TapPaychex(Tap):
     # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
+            "client_id",
+            th.StringType,
+            required=True,
+            secret=False,  # Flag config as protected.
+            title="oAuth client id",
+            description="The oAuth client id",
+        ),
+        th.Property(
+            "client_secret",
             th.StringType,
             required=True,
             secret=True,  # Flag config as protected.
-            title="Auth Token",
-            description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "project_ids",
-            th.ArrayType(th.StringType),
-            required=True,
-            title="Project IDs",
-            description="Project IDs to replicate",
-        ),
-        th.Property(
-            "start_date",
-            th.DateTimeType,
-            description="The earliest record date to sync",
-        ),
-        th.Property(
-            "api_url",
-            th.StringType,
-            title="API URL",
-            default="https://api.mysample.com",
-            description="The url for the API service",
-        ),
-        th.Property(
-            "user_agent",
-            th.StringType,
-            description=(
-                "A custom User-Agent header to send with each request. Default is "
-                "'<tap_name>/<tap_version>'"
-            ),
+            title="oAuth client secret",
+            description="The oAuth client secret",
         ),
     ).to_dict()
 
@@ -60,8 +41,8 @@ class TapPaychex(Tap):
             A list of discovered streams.
         """
         return [
-            streams.GroupsStream(self),
-            streams.UsersStream(self),
+            streams.CompaniesStream(self),
+            streams.WorkersStream(self),
         ]
 
 

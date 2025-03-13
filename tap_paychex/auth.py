@@ -2,12 +2,25 @@
 
 from __future__ import annotations
 
-from singer_sdk.authenticators import OAuthJWTAuthenticator
+from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
 
 
-class PaychexAuthenticator(OAuthJWTAuthenticator):
+class PaychexAuthenticator(OAuthAuthenticator, metaclass=SingletonMeta):
     """Authenticator class for Paychex."""
+    
+    @property
+    def oauth_request_body(self) -> dict:
+        """Define the OAuth request body for the AutomaticTestTap API.
 
+        Returns:
+            A dict with the request body
+        """
+        return {
+            "client_id": self.config["client_id"],
+            "client_secret": self.config["client_secret"],
+            "grant_type": "client_credentials",
+        }
+    
     @classmethod
     def create_for_stream(
         cls,
@@ -23,6 +36,6 @@ class PaychexAuthenticator(OAuthJWTAuthenticator):
         """
         return cls(
             stream=stream,
-            auth_endpoint="TODO: OAuth Endpoint URL",
-            oauth_scopes="TODO: OAuth Scopes",
+            auth_endpoint="https://api.paychex.com/auth/oauth/v2/token",
+            oauth_scopes="",
         )

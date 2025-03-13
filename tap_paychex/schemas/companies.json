@@ -1,0 +1,178 @@
+{
+    "type": "object",
+    "properties": {
+        "companyId": {
+            "type": "string",
+            "description": "The unique identifier associated with this companies representation.",
+            "example": "99Z5V9BTI8J2FCGESC05"
+        },
+        "displayId": {
+            "type": "string",
+            "description": "The client account number used for identification purposes. (no dash or spaces allowed, only the last 8 characters  of the ID)",
+            "example": "09620579"
+        },
+        "legalName": {
+            "type": "string",
+            "description": "The legal name of the company.",
+            "example": "Monsters, Inc"
+        },
+        "hasPermission": {
+            "type": "boolean",
+            "description": "Indicates whether the provisioned company has active payroll product codes. Companies without active payroll product codes will not be accessible via the API."
+        },
+        "legalId": {
+            "type": "object",
+            "properties": {
+                "legalIdType": {
+                    "type": "string",
+                    "description": "A value that identifies the type of taxpayer identification number provided.   SSN: Social  Security Number - 9 digit number   , FEIN: Federal Employer Identification Number (EIN)",
+                    "enum": [
+                        "SSN",
+                        "FEIN"
+                    ]
+                },
+                "legalIdValue": {
+                    "type": "string",
+                    "description": "The federal level taxpayer id number assigned to a business",
+                    "example": "995886885"
+                }
+            },
+            "description": "The workers legal tax identification information. This data field cannot be PATCHED for ACTIVE workers."
+        },
+        "communications": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "communicationId": {
+                        "type": "string",
+                        "description": "The unique ID associated with communication ",
+                        "example": "00Z5V9BTINBT97UMERCA"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "A set of communication types classifying an instruction that the customer, requester, or subject must comply with in order for the screening to go forward. NOTE: PHONE and EMAIL type supports BUSINESS and PERSONAL usage type only.MOBILE_PHONE, FAX and PAGER supports BUSINESS usage type only.This data field cannot be PATCHED.",
+                        "example": "STREET_ADDRESS",
+                        "enum": [
+                            "STREET_ADDRESS",
+                            "PO_BOX_ADDRESS",
+                            "PHONE",
+                            "MOBILE_PHONE",
+                            "FAX",
+                            "EMAIL",
+                            "PAGER"
+                        ]
+                    },
+                    "usageType": {
+                        "type": "string",
+                        "description": "A code classifying a designated use associated with a contact method. For example, whether a telephone or email address is one for business communications or one primarily for personal use.This data field cannot be PATCHED.",
+                        "example": "BUSINESS",
+                        "enum": [
+                            "PERSONAL",
+                            "BUSINESS",
+                            "HOME",
+                            "WORK",
+                            "LOCATION_STREET_ADDRESS",
+                            "MAILING_ADDRESS"
+                        ]
+                    },
+                    "dialCountry": {
+                        "type": "string",
+                        "description": "The country dialing code for a communication number."
+                    },
+                    "dialArea": {
+                        "type": "string",
+                        "description": "The area dialing code for a communication number."
+                    },
+                    "dialNumber": {
+                        "type": "string",
+                        "description": "The communication number, not including country dialing or area dialing codes."
+                    },
+                    "dialExtension": {
+                        "type": "string",
+                        "description": "The extension of the associated communication number."
+                    },
+                    "uri": {
+                        "type": "string",
+                        "description": "The mailto address as specified in RFC2368 ."
+                    },
+                    "streetLineOne": {
+                        "type": "string",
+                        "description": "The street address line one",
+                        "example": "Mike St"
+                    },
+                    "streetLineTwo": {
+                        "type": "string",
+                        "description": "The street address line two",
+                        "example": "Sulley Ln"
+                    },
+                    "postOfficeBox": {
+                        "type": "string",
+                        "description": "The postal office box. This data field cannot be PATCHED."
+                    },
+                    "city": {
+                        "type": "string",
+                        "description": "The city name",
+                        "example": "ANAHEIM"
+                    },
+                    "postalCode": {
+                        "type": "string",
+                        "description": "The zip-code",
+                        "example": "92802"
+                    },
+                    "postalCodeExtension": {
+                        "type": "string",
+                        "description": "The zip-code extension"
+                    },
+                    "countrySubdivisionCode": {
+                        "type": "string",
+                        "description": "The state code (ISO 3166 subdivision code)",
+                        "example": "CA"
+                    },
+                    "countryCode": {
+                        "type": "string",
+                        "description": "The country code (ISO 3166 alpha-2)",
+                        "example": "US"
+                    }
+                },
+                "description": "Array of properties which specify communication information associated with an entity."
+            }
+        },
+        "links": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "rel": {
+                        "type": "string"
+                    },
+                    "href": {
+                        "type": "string"
+                    },
+                    "hreflang": {
+                        "type": "string"
+                    },
+                    "media": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "deprecation": {
+                        "type": "string"
+                    },
+                    "profile": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "description": "The state representation of a company"
+}
