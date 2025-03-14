@@ -31,7 +31,7 @@
             ]
         },
         "customEmploymentType": {
-            "type": "object",
+            "type": ["object", "null"],
             "properties": {
                 "customEmploymentTypeId": {
                     "type": "string",
@@ -86,7 +86,7 @@
             "example": "2015-06-15T00:00:00Z"
         },
         "clockId": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The clock ID of the worker that can be an identification for other systems.",
             "example": "4321"
         },
@@ -146,7 +146,7 @@
             "description": "The workers legal tax identification information. This data field cannot be PATCHED for ACTIVE workers."
         },
         "laborAssignmentId": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The workers home labor assignment.",
             "example": "970001557863345"
         },
@@ -156,12 +156,12 @@
             "example": "970001701620675"
         },
         "jobId": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The workers home job. This data field cannot be POSTED or PATCHED.",
             "example": "970001557916904"
         },
         "job": {
-            "type": "object",
+            "type": ["object", "null"],
             "properties": {
                 "jobTitleId": {
                     "type": "string",
@@ -243,7 +243,7 @@
             "description": "The organization which the worker is part of."
         },
         "supervisor": {
-            "type": "object",
+            "type": ["object", "null"],
             "properties": {
                 "workerId": {
                     "type": "string",
@@ -365,7 +365,7 @@
             "example": "ACTIVE"
         },
         "communications": {
-            "type": "array",
+            "type": ["array", "null"],
             "description": "Worker Communications. This data field cannot be updated for worker endpoint.",
             "items": {
                 "type": "object",
@@ -525,7 +525,7 @@
             }
         },
         "workerCorrelationId": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "Id that you define which is used for error handling/responses.This data field is used while POSTING multiple IN_PROGRESS workers"
         }
     }

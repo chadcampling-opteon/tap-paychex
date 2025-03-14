@@ -24,12 +24,9 @@ class CompaniesStream(PaychexStream):
 
     def get_child_context(self, record: dict, context: t.Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
-        worker_link = next((link["href"] for link in record["links"] if link["rel"] == "workers"), None)
-        if(worker_link):
-            worker_parsed_url = urlparse(worker_link)
+        workers_link = next((link["href"] for link in record["links"] if link["rel"] == "workers"), None)
         return {
-           "worker_path": worker_parsed_url.path,
-           "worker_url": worker_link
+           "workers_url": workers_link
         }
 
 class WorkersStream(PaychexStream):
@@ -47,4 +44,4 @@ class WorkersStream(PaychexStream):
     schema_filepath = SCHEMAS_DIR / "workers.json"  # noqa: ERA001
 
     def get_url(self, context):
-        return context["worker_url"]
+        return context["workers_url"]

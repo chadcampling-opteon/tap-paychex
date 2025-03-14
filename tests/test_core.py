@@ -7,8 +7,8 @@ from singer_sdk.testing import get_tap_test_class
 from tap_paychex.tap import TapPaychex
 
 SAMPLE_CONFIG = {
-    "start_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
-    # TODO: Initialize minimal tap config
+    "client_id": "1234",
+    "client_secret": "shhhh-secret"
 }
 
 
