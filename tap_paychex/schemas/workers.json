@@ -306,7 +306,8 @@
                         "INACTIVE",
                         "TERMINATED",
                         "PENDING",
-                        "IN_PROGRESS"
+                        "IN_PROGRESS",
+                        "TRANSFERRED"
                     ]
                 },
                 "statusReason": {
