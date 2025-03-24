@@ -527,6 +527,11 @@
         "workerCorrelationId": {
             "type": ["string", "null"],
             "description": "Id that you define which is used for error handling/responses.This data field is used while POSTING multiple IN_PROGRESS workers"
+        },
+        "companyId": {
+            "type": "string",
+            "description": "The unique identifier associated with this workers company representation.",
+            "example": "99Z5V9BTI8J2FCGESC05"
         }
     }
 }

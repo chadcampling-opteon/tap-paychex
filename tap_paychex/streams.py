@@ -26,7 +26,8 @@ class CompaniesStream(PaychexStream):
         """Return a context dictionary for child streams."""
         workers_link = next((link["href"] for link in record["links"] if link["rel"] == "workers"), None)
         return {
-           "workers_url": workers_link
+           "workers_url": workers_link,
+           "companyId": record["companyId"]
         }
 
 class WorkersStream(PaychexStream):
