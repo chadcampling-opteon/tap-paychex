@@ -46,3 +46,30 @@ class WorkersStream(PaychexStream):
 
     def get_url(self, context):
         return context["workers_url"]
+
+    def get_child_context(self, record: dict, context: t.Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        communications_link = next((link["href"] for link in record["links"] if link["rel"] == "communications"), None)
+        return {
+           "workers_communication_url": communications_link,
+           "workerId": record["workerId"]
+        }
+    
+class WorkersCommunicationStream(PaychexStream):
+    """Define Companies stream."""
+    _LOG_REQUEST_METRIC_URLS = True
+    pagination_support = False
+    
+    name = "workers_communication"
+    parent_stream_type = WorkersStream
+    path = None
+    primary_keys: t.ClassVar[list[str]] = ["communicationId"]
+    replication_key = None
+    # Optionally, you may also use `schema_filepath` in place of `schema`:
+    schema_filepath = SCHEMAS_DIR / "workers_communication.json"  # noqa: ERA001
+    
+    ignore_parent_replication_key = False
+    state_partitioning_keys = []
+
+    def get_url(self, context):
+        return context["workers_communication_url"]
