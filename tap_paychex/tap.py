@@ -43,6 +43,7 @@ class TapPaychex(Tap):
         return [
             streams.CompaniesStream(self),
             streams.WorkersStream(self),
+            streams.WorkersCommunicationStream(self),
         ]
 
 
