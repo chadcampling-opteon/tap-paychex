@@ -31,62 +31,91 @@
             ]
         },
         "dialCountry": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The country dialing code for a communication number"
         },
         "dialArea": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The area dialing code for a communication number"
         },
         "dialNumber": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The communication number, not including country dialing or area dialing codes"
         },
         "dialExtension": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The extension of the associated communication number"
         },
         "uri": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The mailto address as specified in RFC2368"
         },
         "streetLineOne": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The street address line one"
         },
         "streetLineTwo": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The street address line two"
         },
         "postOfficeBox": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The postal office box. This data field cannot be PATCHED"
         },
         "city": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The city name"
         },
         "postalCode": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The zip-code"
         },
         "postalCodeExtension": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The zip-code extension"
         },
         "countrySubdivisionCode": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The state code (ISO 3166 subdivision code)"
         },
         "countryCode": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The country code (ISO 3166 alpha-2)"
         },
         "links": {
             "type": "array",
-            "items": {
-                "$ref": "#/components/schemas/Link"
-            }
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "rel": {
+                                    "type": "string"
+                                },
+                                "href": {
+                                    "type": "string"
+                                },
+                                "hreflang": {
+                                    "type": "string"
+                                },
+                                "media": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "deprecation": {
+                                    "type": "string"
+                                },
+                                "profile": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                }
+                            }
+                        }
         },
         "workerId": {
             "type": "string",

@@ -1,0 +1,48 @@
+{
+    "type": "object",
+    "properties": {
+        "ID": {
+            "type": "integer"
+        },
+        "DateTimeSubmitted": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "DurationPerDaySecs": {
+            "type": "integer"
+        },
+        "EmpIdentifier": {
+            "type": "string"
+        },
+        "EmpNotes": {
+            "type": "string"
+        },
+        "EndDateTime": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "ExtractedDateTime": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "IncludeWeekends": {
+            "type": "boolean"
+        },
+        "PayTypeCode": {
+            "type": "string"
+        },
+        "PayTypeID": {
+            "type": "integer"
+        },
+        "PayTypeName": {
+            "type": "string"
+        },
+        "StartDateTime": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "StatusType": {
+            "type": "integer"
+        }
+    }
+}

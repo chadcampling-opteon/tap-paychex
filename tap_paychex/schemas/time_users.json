@@ -1,0 +1,48 @@
+{
+    "type": "object",
+    "properties": {
+      "Badge": {
+        "type": "string"
+      },
+      "Email": {
+        "type": ["string", "null"],
+        "format": "email"
+      },
+      "EmpIdentifier": {
+        "type": "string"
+      },
+      "FirstName": {
+        "type": "string"
+      },
+      "LastName": {
+        "type": "string"
+      },
+      "Phone1": {
+        "type": "string"
+      },
+      "Phone2": {
+        "type": "string"
+      },
+      "Phone3": {
+        "type": "string"
+      },
+      "Status": {
+        "type": "string"
+      },
+      "TimeZoneDisplayName": {
+        "type": "string"
+      },
+      "TimeZoneIsDST": {
+        "type": "boolean"
+      },
+      "TimeZoneKey": {
+        "type": "string"
+      },
+      "TimeZoneUTCOffset": {
+        "type": "integer"
+      },
+      "Title": {
+        "type": "string"
+      }
+    }
+  }
