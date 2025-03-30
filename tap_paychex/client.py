@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 from abc import ABCMeta
+from datetime import datetime, timezone
+from dateutil.relativedelta import relativedelta
+import json
 import typing as t
 from functools import cached_property
 from importlib import resources
 
 from singer_sdk.pagination import BaseAPIPaginator, SimpleHeaderPaginator  # noqa: TC002
 from singer_sdk.streams import RESTStream
+from singer_sdk.helpers.jsonpath import extract_jsonpath
 
-from tap_paychex.auth import PaychexAuthenticator
+from tap_paychex.auth import PaychexAuthenticator, PaychexTimeAuthenticator
 
 if t.TYPE_CHECKING:
     import requests
@@ -162,5 +166,91 @@ class PaychexPaginator(BaseAPIPaginator[dict], metaclass=ABCMeta):
         result = {
             "offset": offset,
             "etag": etag
+        }
+        return result
+    
+class PaychexTimeStream(RESTStream):
+    """Paychex stream class."""
+    # Set to true for endpoints that support pagination
+    pagination_support = False
+    
+    # Paychex recommend a max 100 page size
+    #_page_size = 60
+    
+    http_method = "POST"
+    
+    # Used in Paychex pagination
+    #_etag = None
+
+    # Update this value if necessary or override `parse_response`.
+    records_jsonpath = "$.Results[*]"
+
+    @property
+    def url_base(self) -> str:
+        """Return the API URL root, configurable via tap settings."""
+        return "https://paychex.centralservers.com/service/ws-json/2.0"
+
+    @cached_property
+    def authenticator(self) -> Auth:
+        """Return a new authenticator object.
+
+        Returns:
+            An authenticator instance.
+        """
+        return PaychexTimeAuthenticator.create_for_stream(self)
+
+    def get_new_paginator(self):        
+        return SimpleHeaderPaginator("X-Next-Page")
+
+class PaychexTimePaginator(BaseAPIPaginator[dict], metaclass=ABCMeta):
+    """Paginator class for APIs that use date range pagination. Will page by months"""
+
+    def __init__(
+        self,
+        day_count_window: int,
+        day_count_future: int,
+        *args: t.Any,
+        **kwargs: t.Any,
+    ) -> None:
+        """Create a new paginator.
+
+        Args:
+            start_value: Initial value.
+            page_size: Constant page size.
+            args: Paginator positional arguments.
+            kwargs: Paginator keyword arguments.
+        """
+        self.end_date_signpost = ((datetime.now(timezone.utc)) + relativedelta(days=day_count_future)).replace(hour=0, minute=0, second=0, microsecond=0)
+        self.day_count_window = day_count_window
+        super().__init__({}, *args, **kwargs)
+        self._jsonpath = "$.EndDate"
+        #super().__init__({}, *args, **kwargs)
+
+   
+    def get_next(self, response: requests.Response) -> dict | None:
+        """Get the next page offset.
+
+        Args:
+            response: API response object.
+
+        Returns:
+            The next page offset.
+        """
+        request_json = json.loads(response.request.body)
+        all_matches = extract_jsonpath(self._jsonpath, request_json)
+        last_end_date = next(all_matches, None)
+        
+        start_date = datetime.fromtimestamp(int(last_end_date[6:16]), tz=timezone.utc)
+        end_date = start_date + relativedelta(days=self.day_count_window)
+        
+        if start_date >= self.end_date_signpost:
+            return None
+        
+        if end_date > self.end_date_signpost:
+            end_date = self.end_date_signpost
+            
+        result = {
+            "start_date": start_date,
+            "end_date": end_date
         }
         return result

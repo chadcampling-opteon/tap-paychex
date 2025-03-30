@@ -20,7 +20,7 @@ class TapPaychex(Tap):
             "client_id",
             th.StringType,
             required=True,
-            secret=False,  # Flag config as protected.
+            secret=False,  
             title="oAuth client id",
             description="The oAuth client id",
         ),
@@ -31,6 +31,30 @@ class TapPaychex(Tap):
             secret=True,  # Flag config as protected.
             title="oAuth client secret",
             description="The oAuth client secret",
+        ),
+        th.Property(
+            "time_customer_alias",
+            th.StringType,
+            required=True,
+            secret=False,  
+            title="Paychex Time Customer Alias",
+            description="Paychex Time Customer Alias",
+        ),
+        th.Property(
+            "time_shared_key",
+            th.StringType,
+            required=True,
+            secret=True,  # Flag config as protected.
+            title="Paychex Time Shared Key",
+            description="Paychex Time Shared Key",
+        ),
+        th.Property(
+            "time_password",
+            th.StringType,
+            required=True,
+            secret=True,  # Flag config as protected.
+            title="Paychex Time User Pass",
+            description="Paychex Time User Pass",
         ),
     ).to_dict()
 
@@ -44,6 +68,8 @@ class TapPaychex(Tap):
             streams.CompaniesStream(self),
             streams.WorkersStream(self),
             streams.WorkersCommunicationStream(self),
+            streams.TimeUsers(self),
+            streams.TimeOffRequest(self),
         ]
 
 

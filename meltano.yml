@@ -17,7 +17,7 @@ plugins:
     - stream-maps
 
     settings_group_validation:
-    - [client_id, client_secret]
+    - [client_id, client_secret, time_customer_alias, time_shared_key, time_password]
 
     settings:
     - name: client_id
@@ -29,6 +29,25 @@ plugins:
       label: Client Secret
       description: The oAuth Client Secret
       sensitive: true
+    
+    - name: time_customer_alias
+      kind : string
+      sensitive: False
+      label: Paychex Time Customer Alias
+      description: Paychex Time Customer Alias
+      
+    - name: time_shared_key
+      kind : string
+      sensitive: True
+      label: Paychex Time Shared Key
+      description: Paychex Time Shared Key
+      
+    - name: time_password
+      kind : string
+      sensitive: True
+      label: Paychex Time User Pass
+      description: Paychex Time User Pass
+      
 
   loaders:
   - name: target-jsonl
