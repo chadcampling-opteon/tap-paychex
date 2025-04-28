@@ -16,6 +16,20 @@
                 ".secrets/config.json",
             ],
         },
+        {
+            "name": "tap-paychex --state",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "program": "tap_paychex",
+            "justMyCode": false,
+            "args": [
+                "--config",
+                ".secrets/config.json",
+                "--state",
+                ".secrets/state.json",
+            ],
+        },
 
     ]
 }
