@@ -116,13 +116,17 @@ class PaychexTimeAuthenticator(APIAuthenticatorBase):
             timeout=60
         )
         
+        token = None
         try:
             token_response.raise_for_status()
+            token = token_response.json()
+            if "ErrorCode" in token:
+                msg = f"Failed to get token, response was '{token_response.json()}'. {token_response.status_code}"
+                raise RuntimeError(msg)
         except requests.HTTPError as ex:
             msg = f"Failed OAuth login, response was '{token_response.json()}'. {ex}"
             raise RuntimeError(msg) from ex
 
         self.logger.info("Authorization attempt was successful.")
-
-        token = token_response.json()
+        
         self.auth_credentials[self._BODY_KEY] = token
