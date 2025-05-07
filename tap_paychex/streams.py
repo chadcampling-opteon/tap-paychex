@@ -35,7 +35,7 @@ class CompaniesStream(PaychexStream):
         }
 
 class WorkersStream(PaychexStream):
-    """Define Companies stream."""
+    """Define Workers stream."""
     _LOG_REQUEST_METRIC_URLS = True
     pagination_support = True
     
@@ -60,7 +60,7 @@ class WorkersStream(PaychexStream):
         }
     
 class WorkersCommunicationStream(PaychexStream):
-    """Define Companies stream."""
+    """Define Workers Communication stream."""
     _LOG_REQUEST_METRIC_URLS = True
     pagination_support = False
     
@@ -77,6 +77,26 @@ class WorkersCommunicationStream(PaychexStream):
 
     def get_url(self, context):
         return context["workers_communication_url"]    
+    
+    def post_process(self, row, context = None):
+        row["workerId"] = context["workerId"]
+        return row
+    
+class WorkersStatusHistoryStream(PaychexStream):
+    """Define Workers Status History stream."""
+    _LOG_REQUEST_METRIC_URLS = True
+    pagination_support = False
+    
+    name = "workers_status_history"
+    parent_stream_type = WorkersStream
+    path = "/workers/{workerId}/status"
+    primary_keys: t.ClassVar[list[str]] = ["workerId", "order"]
+    replication_key = None
+    # Optionally, you may also use `schema_filepath` in place of `schema`:
+    schema_filepath = SCHEMAS_DIR / "workers_status_history.json"  # noqa: ERA001
+    
+    ignore_parent_replication_key = False
+    state_partitioning_keys = []
     
     def post_process(self, row, context = None):
         row["workerId"] = context["workerId"]

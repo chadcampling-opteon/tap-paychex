@@ -68,6 +68,7 @@ class TapPaychex(Tap):
             streams.CompaniesStream(self),
             streams.WorkersStream(self),
             streams.WorkersCommunicationStream(self),
+            streams.WorkersStatusHistoryStream(self),
             streams.TimeUsers(self),
             streams.TimeOffRequest(self),
         ]
