@@ -1,0 +1,80 @@
+{
+    "type": "object",
+    "properties": {
+        "workerStatusId": {
+            "type": ["string", "null"],
+            "description": "The unique identifier associated with this status representation.",
+            "example": "00DWS906IMW2JSH8AQJ9"
+        },
+        "statusType": {
+            "type": "string",
+            "description": "The workers current status.",
+            "example": "ACTIVE",
+            "enum": [
+                "ACTIVE",
+                "INACTIVE",
+                "TERMINATED",
+                "PENDING",
+                "IN_PROGRESS",
+                "TRANSFERRED"
+            ]
+        },
+        "statusReason": {
+            "type": "string",
+            "description": "The detailed reason of the workers current status.",
+            "example": "HIRED"
+        },
+        "effectiveDate": {
+            "type": "string",
+            "description": "Date that this status has started for the worker.",
+            "format": "date-time",
+            "example": "2015-06-15T00:00:00Z"
+        },
+        "order": {
+            "type": "integer",
+            "format": "int32"
+        },
+        "links": {
+            "type": ["array", "null"],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "rel": {
+                        "type": "string"
+                    },
+                    "href": {
+                        "type": "string"
+                    },
+                    "hreflang": {
+                        "type": "string"
+                    },
+                    "media": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "deprecation": {
+                        "type": "string"
+                    },
+                    "profile": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "workerId": {
+            "type": "string",
+            "description": "The unique identifier associated with this worker representation.",
+            "example": "00Z5V9BTIHRQF2CF7BTH"
+        }
+    },
+    "description": "The workers employment status information. This data field cannot be POSTED or PATCHED for an IN_PROGRESS worker.",
+    "example": "ACTIVE"
+}
