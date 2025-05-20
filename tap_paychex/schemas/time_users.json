@@ -43,6 +43,9 @@
       },
       "Title": {
         "type": "string"
+      },
+      "CustomerAlias": {
+        "type": "string"
       }
     }
   }
