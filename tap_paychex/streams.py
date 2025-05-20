@@ -156,7 +156,7 @@ class TimeUsers(PaychexTimeStream):
     
     schema_filepath = SCHEMAS_DIR / "time_users.json"
     
-    primary_keys: t.ClassVar[list[str]] = ["EmpIdentifier"]
+    primary_keys: t.ClassVar[list[str]] = ["EmpIdentifier","CustomerAlias"]
     
     def prepare_request_payload(self, context, next_page_token):
         return {
@@ -168,4 +168,5 @@ class TimeUsers(PaychexTimeStream):
         
     def post_process(self, row, context = None):
         row['Email'] = None if row.get('Email') == '' else row.get('Email')
+        row['CustomerAlias'] = self.config["time_customer_alias"]
         return row
