@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-import decimal
 import typing as t
 from importlib import resources
 from urllib.parse import urlparse
@@ -51,11 +50,18 @@ class WorkersStream(PaychexStream):
     def get_url(self, context):
         return context["workers_url"]
 
+    @property
+    def http_headers(self) -> dict:
+        """Return headers for HTTP requests."""
+        headers = super().http_headers
+        headers["Accept"] = "application/vnd.paychex.workers_communications.v1+json"
+        return headers
+
     def get_child_context(self, record: dict, context: t.Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
-        communications_link = next((link["href"] for link in record["links"] if link["rel"] == "communications"), None)
+        communications = record.get("communications")
         return {
-           "workers_communication_url": communications_link,
+           "communications": communications,
            "workerId": record["workerId"]
         }
     
@@ -74,9 +80,11 @@ class WorkersCommunicationStream(PaychexStream):
     
     ignore_parent_replication_key = False
     state_partitioning_keys = []
-
-    def get_url(self, context):
-        return context["workers_communication_url"]    
+    
+    def get_records(self, context):
+        for record in context["communications"]:
+            if record.get("communicationId"):
+                yield record
     
     def post_process(self, row, context = None):
         row["workerId"] = context["workerId"]
