@@ -82,9 +82,14 @@ class WorkersCommunicationStream(PaychexStream):
     state_partitioning_keys = []
     
     def get_records(self, context):
-        for record in context["communications"]:
-            if record.get("communicationId"):
-                yield record
+        """Yield communication records with a valid communicationId."""
+        communications = context.get("communications", [])
+        for record in communications:
+            if not record.get("communicationId"):
+                continue
+            transformed = self.post_process(record, context)
+            if transformed is not None:
+                yield transformed
     
     def post_process(self, row, context = None):
         row["workerId"] = context["workerId"]
