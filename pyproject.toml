@@ -20,7 +20,7 @@ classifiers = [
 license-files = [ "LICENSE" ]
 requires-python = ">=3.9"
 dependencies = [
-    "singer-sdk[faker,jwt]~=0.44.3",
+    "singer-sdk[faker,jwt]~=0.47.0",
     "requests~=2.32.3",
     "meltano>=3.1.0",
 ]
