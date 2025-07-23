@@ -157,6 +157,7 @@ class TimeOffRequest(PaychexTimeStream):
         row['StartDateTime'] = row['StartDateTimeSchema']
         del row['StartDateTimeSchema']
         row['DateTimeSubmitted'] = datetime.fromtimestamp(int(row['DateTimeSubmitted'][6:16]), tz=timezone.utc)
+        row['CustomerAlias'] = self.config["time_customer_alias"]
         return row
         
 class TimeUsers(PaychexTimeStream):

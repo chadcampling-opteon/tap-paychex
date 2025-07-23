@@ -43,6 +43,9 @@
         },
         "StatusType": {
             "type": "integer"
+        },
+        "CustomerAlias": {
+            "type": "string"
         }
     }
 }
