@@ -87,9 +87,7 @@ class WorkersCommunicationStream(PaychexStream):
         for record in communications:
             if not record.get("communicationId"):
                 continue
-            transformed = self.post_process(record, context)
-            if transformed is not None:
-                yield transformed
+            yield record
     
     def post_process(self, row, context = None):
         row["workerId"] = context["workerId"]

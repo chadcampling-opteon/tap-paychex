@@ -19,15 +19,15 @@
             ]
         },
         "usageType": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "A code classifying a designated use associated with a contact method. For example, whether a telephone or email address is one for business communications or one primarily for personal use.This data field cannot be PATCHED.",
             "enum": [
-                "PERSONAL",
-                "BUSINESS",
-                "HOME",
-                "WORK",
-                "LOCATION_STREET_ADDRESS",
-                "MAILING_ADDRESS"
+            "PERSONAL",
+            "BUSINESS",
+            "HOME",
+            "WORK",
+            "LOCATION_STREET_ADDRESS",
+            "MAILING_ADDRESS"
             ]
         },
         "dialCountry": {
