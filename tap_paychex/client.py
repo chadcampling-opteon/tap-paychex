@@ -224,6 +224,9 @@ class PaychexTimePaginator(BaseAPIPaginator[dict], metaclass=ABCMeta):
         self.day_count_window = day_count_window
         super().__init__({}, *args, **kwargs)
         self._jsonpath = "$.EndDate"
+        
+    def continue_if_empty(self, response):
+        return True
    
     def get_next(self, response: requests.Response) -> dict | None:
         """Get the next page offset.
