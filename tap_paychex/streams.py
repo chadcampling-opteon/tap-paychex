@@ -121,7 +121,7 @@ class TimeOffRequest(PaychexTimeStream):
     
     schema_filepath = SCHEMAS_DIR / "time_off_requests.json"
     
-    primary_keys: t.ClassVar[list[str]] = ["ID"]
+    primary_keys: t.ClassVar[list[str]] = ["ID", "CustomerAlias"]
     replication_key = "ExtractedDateTime"
     
     def prepare_request_payload(self, context, next_page_token):
